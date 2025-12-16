@@ -2,14 +2,6 @@
 
 A dynamic music player using Tailwind CSS, HTML, and JavaScript.
 
-## Setup
-
-1. Install dependencies:
-
-```bash
-npm install
-```
-
 ## Folder Structure
 
 ```
@@ -34,3 +26,17 @@ my-music-player/
 └── README.md                  
 
 ```
+
+## Setup
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+2. Initialize the tailwind css
+
+```bash
+npx tailwindcss -i ./src/css/input.css -o ./bin/output.css --watch
+```
+3. Open `src/index.html` in a browser
