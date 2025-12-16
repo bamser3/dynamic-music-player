@@ -16,21 +16,21 @@ npm install
 my-music-player/
 ├── src/
 │   ├── css/
-│   │   └── input.css         # Your Tailwind source CSS
+│   │   └── input.css         
 │   ├── js/
-│   │   └── main.js           # Your JavaScript
+│   │   └── main.js           
 │   ├── images/               # Album covers, icons
 │   │   ├── residential.jpg
 │   │   ├── wassup.jpg
 │   │   └── cgeskyte.jpg
-│   └── index.html            # Your HTML file
+│   └── index.html            
 ├── audio/
 │   ├── residential.mp3
 │   ├── wassup.mp3
 │   └── cantgetenough.mp3
-├── tailwind.config.js         # Tailwind configuration
-├── package.json               # Node dependencies
-├── package-lock.json          # Exact versions
-└── README.md                  # Optional project description
+├── tailwind.config.js         
+├── package.json               
+├── package-lock.json         
+└── README.md                  
 
 ```
