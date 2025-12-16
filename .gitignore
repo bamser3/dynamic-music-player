@@ -1,0 +1,11 @@
+# Node modules
+node_modules/
+
+# Tailwind output
+bin/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
