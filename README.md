@@ -1,6 +1,6 @@
 # My Music Player
 
-A simple music player using Tailwind CSS, HTML, and JavaScript.
+A dynamic music player using Tailwind CSS, HTML, and JavaScript.
 
 ## Setup
 
