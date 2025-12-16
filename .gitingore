@@ -1,0 +1,14 @@
+# Node dependencies
+node_modules/
+
+# Tailwind output
+bin/
+
+# MacOS system files
+.DS_Store
+
+# Logs
+*.log
+
+# VSCode settings (optional)
+.vscode/
