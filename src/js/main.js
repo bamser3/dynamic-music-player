@@ -10,10 +10,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const track =
     document.getElementById("track") || document.querySelector(".bg-gray-600");
   const progressThumb = document.getElementById("progress-thumb");
-  const gradientBg = document.getElementById("gradient-bg");
   const gradientBgA = document.getElementById("gradient-bg-a");
   const gradientBgB = document.getElementById("gradient-bg-b");
   const bodyGradient = document.getElementById("body-gradient");
+  const artistName = document.getElementById("artist-name");
+  const artistDescription = document.getElementById("artist-description");
+  const nextSongArt = document.getElementById("next-song-art");
+  const nextSongTitle = document.getElementById("next-song-title");
+  const nextSongArtist = document.getElementById("next-song-artist");
+  const artistInfo = document.getElementById("artist-info");
+  const volumeSlider = document.getElementById("volume");
 
   // track which gradient layer is visible
   let activeGradient = gradientBgA || gradientBgB;
@@ -65,20 +71,32 @@ document.addEventListener("DOMContentLoaded", () => {
       artist: "softsuicide",
       src: "./audio/iwidb.mp3",
       cover: "./images/iwidbCover.jpg",
+      description:
+        "Softsuicide creates intricate, math-rock–inspired guitar music, blending complex riffs with emotive melodies for a bold, experimental sound.",
+      artistImage: "./images/cat.jpeg",
     },
     {
       title: "Tactical Retreat",
       artist: "Nurture Nurture",
       src: "./audio/tacticalRetreat.mp3",
       cover: "./images/tacticalRetreatCover.jpg",
+      description:
+        "Nurture Nurture is a Canadian math‑rock duo from Saint John known for guitar‑driven, intricate rock with emotive energy and dynamic rhythms.",
+      artistImage: "./images/nurture.jpg",
     },
     {
       title: "Time Within",
       artist: "Tyler Gill",
       src: "./audio/timeWithin.mp3",
       cover: "./images/timeWithinCover.jpg",
+      description:
+        "Tyler Gill is a guitarist and instrumental artist from San Diego, crafting expressive, math‑rock‑inspired compositions that blend rock, blues, and jazz influences.",
+      artistImage: "./images/tylerGill.jpg",
     },
   ];
+
+  audio.volume = 0.5;
+  volumeSlider.value = audio.volume;
 
   let currentSong = 0;
 
@@ -88,6 +106,12 @@ document.addEventListener("DOMContentLoaded", () => {
     songTitle.textContent = song.title;
     songArtist.textContent = song.artist;
     albumnArt.src = song.cover;
+    artistName.textContent = song.artist;
+    artistDescription.textContent = song.description;
+    nextSongArt.src = songs[(index + 1) % songs.length].cover;
+    nextSongTitle.textContent = songs[(index + 1) % songs.length].title;
+    nextSongArtist.textContent = songs[(index + 1) % songs.length].artist;
+    artistInfo.style.backgroundImage = ` linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${song.artistImage}')`;
   }
 
   function togglePlay() {
@@ -241,6 +265,11 @@ document.addEventListener("DOMContentLoaded", () => {
       // update immediately if already loaded
       updateGradient();
     }
+  }
+  if (volumeSlider) {
+    volumeSlider.addEventListener("input", (e) => {
+      audio.volume = e.target.value
+    })
   }
 
   loadSong(currentSong);

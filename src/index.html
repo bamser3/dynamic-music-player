@@ -4,37 +4,77 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Music Player</title>
-    <link rel="stylesheet" href="../bin/output.css" />
     <script src="./js/main.js" defer></script>
+    <link rel="stylesheet" href="../bin/output.css" />
   </head>
-  <body class="min-h-screen flex items-center justify-center bg-gray-800">
-            <div id="body-gradient" class="absolute inset-0 z-[-1] opacity-80"></div>
+  <body class="min-h-screen bg-gray-900 text-white overflow-hidden"></body>
+  <!-- Background Gradient -->
+  <div id="app-bg" class="fixed inset-0 -z-10">
+    <div id="gradient-bg-a" class="absolute inset-0 opacity-0"></div>
+    <div id="gradient-bg-b" class="absolute inset-0 opacity-0"></div>
+  </div>
 
-<!-- add these two gradient layers for cross-fade -->
-<div id="gradient-bg-a" class="absolute inset-0 z-0" style="opacity:0;"></div>
-<div id="gradient-bg-b" class="absolute inset-0 z-0" style="opacity:0;"></div>
-
-    <div
-      id="player-container"
-      class="fixed inset-0 flex flex-col items-center justify-center p-6 overflow-hidden"
-  >
-
-      <div class="relative z-10">
-    <audio id="audio"></audio>
+  <!-- Music Cover / Info -->
+  <div class="flex items-center justify-center h-screen gap-12">
+    <!-- Albumn Cover-->
     <img
       id="albumn-art"
-      src="./images/iwidbCover.jpg"
-      alt="Albumn Art"
-      class="w-72 h-72 object-cover rounded-md mb-4 mx-auto"
+      class="w-140 h-140 rounded-lg object-cover shadow-2xl"
     />
-      <div id="song-info" class="text-center mb-4">
-      <p id="song-title" class="text-white text-lg font-semibold">
-        Song Title
-      </p>
-      <p id="song-artist" class="text-sm text-gray-400">Artist Name</p>
+    <div class="flex flex-col gap-6">
+      <!-- Artist Info / Next in Queue -->
+      <div
+        id="artist-info"
+        class="flex flex-col gap-4 p-6 rounded-lg bg-cover bg-center text-white shadow-lg min-w-md max-w-md h-96"
+      >
+        <p id="artist-title" class="text-xl font-semibold mb-45">
+          About the artist
+        </p>
+        <p id="artist-name" class="text-lg font-bold">Artist name</p>
+        <p id="artist-description" class="text-white/80 text-sm">
+          Short description about the artist goes here.
+        </p>
+      </div>
+      <!-- Next in queue -->
+      <div
+        id="next-song"
+        class="flex flex-col gap-2 p-2 rounded-lg border border-white/30 bg-black/40 p-4 min-w-md max-w-md"
+      >
+        <p class="text-white text-xl font-semibold">Next in queue</p>
+        <div class="flex flex-row gap-6">
+          <img id="next-song-art" class="w-16 h-16 rounded-lg shadow-2xl" />
+          <!-- Song Info Div -->
+          <div>
+            <p id="next-song-title" class="text-white font-semibold">
+              Song title
+            </p>
+            <p id="next-song-artist" class="text-white/70 text-sm">
+              Artist name
+            </p>
+          </div>
+          <!---->
+        </div>
+      </div>
+      <!---->
     </div>
-      <div id="controls" class="flex justify-center gap-4 mb-4">
-        <button id="prev">  
+  </div>
+
+  <!-- Now playing title -->
+  <div class="fixed top-4 left-4 z-20 max-w-xs">
+    <p id="song-title" class="text-lg font-semibold"></p>
+    <p id="song-artist" class="text-sm text-white/60"></p>
+  </div>
+
+  <!-- Floating Player -->
+  <div
+    id="player"
+    class="fixed bottom-4 left-1/2 -translate-x-1/2 z-20 w-[min(96%,42rem)] rounded-2xl bg-black/40 backdrop-blur-xl shadow-2xl p-4"
+  >
+    <audio id="audio"></audio>
+    <div class="flex items-center gap-4">
+      <!-- Controls -->
+      <div class="flex items-center gap-3">
+        <button id="prev">
           <svg
             width="20px"
             height="20px"
@@ -85,18 +125,32 @@
           </svg>
         </button>
       </div>
-      <!-- added id="track" for reliable selection in JS -->
-      <div id="track" class="w-full h-2 bg-gray-600 rounded-full relative mt-4 group">
-        <div
-          id="progress-filled"
-          class="h-2 bg-green-500 rounded-full w-0"
-        ></div>
 
+      <!-- Progress -->
+      <div class="flex-1 mx-4">
+        <div
+          id="track"
+          class="h-2 bg-white/20 rounded-full relative group cursor-pointer"
+        >
+          <div
+            id="progress-filled"
+            class="w-3 h-3 bg-white rounded-full absolute top-1/2 -translate-y-1/2"
+          ></div>
+        </div>
         <div
           id="progress-thumb"
-          class="w-4 h-4 bg-green-500 rounded-full absolute top-1/2 -translate-y-1/2 left-0 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+          class="w-3 h-3 bg-white rounded-full absolute top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100"
         ></div>
       </div>
+      <!-- Volume -->
+      <input
+        id="volume"
+        type="range"
+        min="0"
+        max="1"
+        step="0.01"
+        class="w-24 h-2 bg-black/40 rounded-full accent-indigo-500"
+      />
     </div>
-  </body>
+  </div>
 </html>
