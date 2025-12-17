@@ -7,10 +7,29 @@ document.addEventListener("DOMContentLoaded", () => {
   const songArtist = document.getElementById("song-artist");
   const albumnArt = document.getElementById("albumn-art");
   const progressFilled = document.getElementById("progress-filled");
-  const track = document.querySelector(".bg-gray-600");
+  const track =
+    document.getElementById("track") || document.querySelector(".bg-gray-600");
   const progressThumb = document.getElementById("progress-thumb");
   const gradientBg = document.getElementById("gradient-bg");
+  const gradientBgA = document.getElementById("gradient-bg-a");
+  const gradientBgB = document.getElementById("gradient-bg-b");
   const bodyGradient = document.getElementById("body-gradient");
+
+  // track which gradient layer is visible
+  let activeGradient = gradientBgA || gradientBgB;
+  let inactiveGradient =
+    gradientBgA === activeGradient ? gradientBgB : gradientBgA;
+
+  // helper to apply a gradient string to a DOM node and ensure opacity transitions are set
+  function applyGradientToLayer(layer, cssGradient) {
+    if (!layer) return;
+    layer.style.background = cssGradient;
+    layer.style.transition = "opacity 900ms ease, background 900ms ease";
+    // ensure will-change for smoother transitions
+    layer.style.willChange = "opacity";
+  }
+
+  let isPlaying = false;
 
   const playSVG = `<svg
                     width="20px"
@@ -42,22 +61,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const songs = [
     {
-      title: "Residential",
-      artist: "Jammabands",
-      src: "./audio/residential.mp3",
-      cover: "./images/residential.jpg",
+      title: "i wish i did better",
+      artist: "softsuicide",
+      src: "./audio/iwidb.mp3",
+      cover: "./images/iwidbCover.jpg",
     },
     {
-      title: "wassup",
-      artist: "Channelfather",
-      src: "./audio/wassup.mp3",
-      cover: "./images/wassup.jpg",
+      title: "Tactical Retreat",
+      artist: "Nurture Nurture",
+      src: "./audio/tacticalRetreat.mp3",
+      cover: "./images/tacticalRetreatCover.jpg",
     },
     {
-      title: "cant get enough",
-      artist: "Skyte",
-      src: "./audio/cantgetenough.mp3",
-      cover: "./images/cgeskyte.jpg",
+      title: "Time Within",
+      artist: "Tyler Gill",
+      src: "./audio/timeWithin.mp3",
+      cover: "./images/timeWithinCover.jpg",
     },
   ];
 
@@ -99,18 +118,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const percent = (audio.currentTime / audio.duration) * 100;
     progressFilled.style.width = percent + "%";
 
-    const trackWidth = track.offsetWidth;
-    progressThumb.style.left = `calc(${percent}% - ${
-      progressThumb.offsetWidth / 2
-    }px)`;
+    // guard: ensure progressThumb exists and track has width
+    if (progressThumb && track) {
+      progressThumb.style.left = `calc(${percent}% - ${
+        progressThumb.offsetWidth / 2
+      }px)`;
+    }
   });
 
-  track.addEventListener("click", (e) => {
-    const rect = track.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const newTime = (clickX / rect.width) * audio.duration;
-    audio.currentTime = newTime;
-  });
+  if (track) {
+    track.addEventListener("click", (e) => {
+      const rect = track.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const newTime = (clickX / rect.width) * audio.duration;
+      audio.currentTime = newTime;
+    });
+  }
 
   nextBtn.addEventListener("click", nextSong);
 
@@ -129,14 +152,24 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function updateGradient() {
-    // Triggered whenever album art changes
+    // ensure image has dimensions
+    const imgW = albumnArt.naturalWidth || albumnArt.width;
+    const imgH = albumnArt.naturalHeight || albumnArt.height;
+    if (!imgW || !imgH) return;
+
     const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext && canvas.getContext("2d");
+    if (!ctx) return;
 
-    canvas.width = albumnArt.naturalWidth;
-    canvas.height = albumnArt.naturalHeight;
+    canvas.width = imgW;
+    canvas.height = imgH;
 
-    ctx.drawImage(albumnArt, 0, 0);
+    try {
+      ctx.drawImage(albumnArt, 0, 0, canvas.width, canvas.height);
+    } catch (err) {
+      // drawImage can throw if image is cross-origin; bail out gracefully
+      return;
+    }
 
     const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
     let r = 0,
@@ -144,28 +177,70 @@ document.addEventListener("DOMContentLoaded", () => {
       b = 0,
       count = 0;
 
-    for (let i = 0; i < data.length; i += 40) {
-      // sample pixels for speed
+    const step = Math.max(4, Math.floor(data.length / 4 / 200) * 4); // limit to ~200 samples
+    for (let i = 0; i < data.length; i += step) {
+      if (i + 2 >= data.length) break;
       r += data[i];
       g += data[i + 1];
       b += data[i + 2];
       count++;
     }
 
+    if (count === 0) return;
+
     r = Math.floor(r / count);
     g = Math.floor(g / count);
     b = Math.floor(b / count);
 
-    gradientBg.style.background = `linear-gradient(135deg, rgb(${r},${g},${b}), #000000)`;
-    gradientBg.style.transition = "background 1s ease";
-    bodyGradient.style.background = `linear-gradient(135deg, rgb(${r},${g},${b}), #000000)`;
-    bodyGradient.style.transition = "background 1s ease";
+    const cssGradient = `linear-gradient(135deg, rgb(${r}, ${g}, ${b}), #000000)`;
+
+    // Cross-fade: set new gradient on the inactive layer, fade it in, fade out the active
+    if (inactiveGradient && activeGradient) {
+      applyGradientToLayer(inactiveGradient, cssGradient);
+
+      // force a reflow so the opacity transition reliably triggers
+      // eslint-disable-next-line no-unused-expressions
+      inactiveGradient.offsetHeight;
+
+      inactiveGradient.style.opacity = "1";
+      activeGradient.style.opacity = "0";
+
+      // after transition, swap active/inactive
+      setTimeout(() => {
+        const tmp = activeGradient;
+        activeGradient = inactiveGradient;
+        inactiveGradient = tmp;
+      }, 950);
+    } else {
+      // fallback: set single layer / body gradient
+      if (gradientBgA) applyGradientToLayer(gradientBgA, cssGradient);
+      if (gradientBgB) applyGradientToLayer(gradientBgB, cssGradient);
+    }
+
+    // update body gradient immediately (optional crossfade can be implemented similarly)
+    if (bodyGradient) {
+      bodyGradient.style.background = cssGradient;
+      bodyGradient.style.transition = "background 900ms ease";
+    }
   }
 
-  if (albumnArt.complete) {
-    updateGradient();
-  } else {
+  // ensure both layers are initialized so the first update shows immediately
+  if (gradientBgA) {
+    gradientBgA.style.transition = "opacity 900ms ease";
+    gradientBgA.style.opacity = "1";
+  }
+  if (gradientBgB) {
+    gradientBgB.style.transition = "opacity 900ms ease";
+    gradientBgB.style.opacity = "0";
+  }
+
+  // always attach load listener so subsequent src changes trigger the gradient update
+  if (albumnArt) {
     albumnArt.addEventListener("load", updateGradient);
+    if (albumnArt.complete) {
+      // update immediately if already loaded
+      updateGradient();
+    }
   }
 
   loadSong(currentSong);

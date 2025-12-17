@@ -10,17 +10,20 @@
   <body class="min-h-screen flex items-center justify-center bg-gray-800">
             <div id="body-gradient" class="absolute inset-0 z-[-1] opacity-80"></div>
 
+<!-- add these two gradient layers for cross-fade -->
+<div id="gradient-bg-a" class="absolute inset-0 z-0" style="opacity:0;"></div>
+<div id="gradient-bg-b" class="absolute inset-0 z-0" style="opacity:0;"></div>
+
     <div
       id="player-container"
-      class="relative bg-gray-800 p-6 rounded-lg shadow-lg w-86 mx-auto mt-10 overflow-hidden"
-    >
+      class="fixed inset-0 flex flex-col items-center justify-center p-6 overflow-hidden"
+  >
 
-      <div id="gradient-bg" class="absolute inset-0 z-0 opacity-80"></div>
       <div class="relative z-10">
     <audio id="audio"></audio>
     <img
       id="albumn-art"
-      src="./images/residential.jpg"
+      src="./images/iwidbCover.jpg"
       alt="Albumn Art"
       class="w-72 h-72 object-cover rounded-md mb-4 mx-auto"
     />
@@ -31,7 +34,7 @@
       <p id="song-artist" class="text-sm text-gray-400">Artist Name</p>
     </div>
       <div id="controls" class="flex justify-center gap-4 mb-4">
-        <button id="prev">
+        <button id="prev">  
           <svg
             width="20px"
             height="20px"
@@ -65,7 +68,7 @@
         </button>
         <button id="next">
           <svg
-            width="20pxs"
+            width="20px"
             height="20px"
             viewBox="0 0 24 24"
             fill="none"
@@ -82,7 +85,8 @@
           </svg>
         </button>
       </div>
-      <div class="w-full h-2 bg-gray-600 rounded-full relative mt-4 group">
+      <!-- added id="track" for reliable selection in JS -->
+      <div id="track" class="w-full h-2 bg-gray-600 rounded-full relative mt-4 group">
         <div
           id="progress-filled"
           class="h-2 bg-green-500 rounded-full w-0"
