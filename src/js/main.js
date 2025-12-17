@@ -144,7 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // guard: ensure progressThumb exists and track has width
     if (progressThumb && track) {
-      progressThumb.style.left = `calc(${percent}% - ${
+      progressThumb.style.left = `calc(${percent - 1 }% - ${
         progressThumb.offsetWidth / 2
       }px)`;
     }
