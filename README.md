@@ -13,24 +13,35 @@ A dynamic music player using Tailwind CSS, HTML, and JavaScript.
 
 ```
 my-music-player/
-├── src/
-│   ├── css/
-│   │   └── input.css         
-│   ├── js/
-│   │   └── main.js           
-│   ├── images/               # Album covers, icons
-│   │   ├── residential.jpg
-│   │   ├── wassup.jpg
-│   │   └── cgeskyte.jpg
-│   └── index.html            
-├── audio/
-│   ├── residential.mp3
-│   ├── wassup.mp3
-│   └── cantgetenough.mp3
-├── tailwind.config.js         
-├── package.json               
-├── package-lock.json         
-└── README.md                  
+├── bin
+│   └── output.css
+├── package.json
+└── src
+    ├── assets
+    │   ├── buttons.html
+    │   ├── next.svg
+    │   ├── pause.svg
+    │   ├── play.svg
+    │   └── prev.svg
+    ├── audio
+    │   ├── iwidb.mp3
+    │   ├── tacticalRetreat.mp3
+    │   └── timeWithin.mp3
+    ├── css
+    │   └── input.css
+    ├── images
+    │   ├── cat.jpeg
+    │   ├── iwidbCover.jpg
+    │   ├── nurture.jpg
+    │   ├── tacticalRetreatCover.jpg
+    │   ├── timeWithinCover.jpg
+    │   └── tylerGill.jpg
+    ├── index.html
+    └── js
+        └── main.js
+
+8 directories, 19 files
+                  
 
 ```
 
