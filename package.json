@@ -12,7 +12,8 @@
     "tailwindcss": "^4.1.18"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "mkdir -p dist && cp src/index.html dist/index.html && tailwindcss -i ./src/css/input.css -o ./dist/output.css --minify"
   },
   "keywords": [],
   "author": "",
