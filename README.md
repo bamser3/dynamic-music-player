@@ -2,6 +2,10 @@
 
 A dynamic music player using Tailwind CSS, HTML, and JavaScript.
 
+## Demo
+
+[Try it out](https://bamser3.github.io/dynamic-music-player/)
+
 ## Folder Structure
 
 ```
