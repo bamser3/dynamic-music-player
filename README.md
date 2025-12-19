@@ -6,6 +6,9 @@ A dynamic music player using Tailwind CSS, HTML, and JavaScript.
 
 [Try it out](https://bamser3.github.io/dynamic-music-player/)
 
+<img width="2277" height="1504" alt="image" src="https://github.com/user-attachments/assets/f0ddff22-1244-4b7b-84db-30f69947279d" />
+
+
 ## Folder Structure
 
 ```
